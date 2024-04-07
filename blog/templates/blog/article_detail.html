@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block carousel %}
+{% endblock carousel %}
+
+{% block main %}
+
+
+<div class="container justify-content-center">
+    <div class="col-14">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <b>Category: {{ article.category }}</b>
+                    </div>
+                    <div>
+                        {% if article.nudges != 1 %}
+                        <b>{{ article.nudges }} nudges</b>
+                        {% else %}
+                        <b>{{ article.nudges }} nudge</b>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'nudges' article.id %}" class="btn btn-outline-primary"><b>NUDGE!</b></a>
+                        <a href="{% url 'article_delete' article.pk %}" class="btn btn-danger">
+                            <b>DELETE</b>
+                        </a>
+                        <a href="{% url 'article_edit' article.pk %}" class="btn btn-warning">
+                            <b>EDIT</b>
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'index' %}" class="btn btn-success">
+                            <b>BACK</b>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <a href="{% url 'article_detail' article.id %}">
+                <img src="{{ article.photo.url }}" class="card-img-top" alt="...">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">{{ article.description }}</p>
+            </div>
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <b>By <a href="{% url 'user_profile' article.author.id %}"> {{article.author}}</a></b>
+                    </div>
+                    <div>
+                        <b>{{ article.created_at }}</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="card p-3 mt-5">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">
+                    Add comment
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        {% for comment in comments %}
+        <div class="comments mt-5">
+            <div class="card mt-3 mb-3">
+                <div class="card-header">
+                    <a href="{% url 'user_profile' comment.author.id %}"> {{comment.author}}</a>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{ comment.text }}</p>
+                        <footer class="blockquote-footer"><cite title="Source Title">{{ comment.created_at }}</cite>
+                        </footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock main %}

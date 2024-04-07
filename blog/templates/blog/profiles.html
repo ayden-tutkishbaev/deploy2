@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+
+{% for profile, user in combined_objects%}
+<div class="profiles">
+    <div class="container mb-3">
+        <div class="cards">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="
+                            {% if profile.image %}
+                            {{ profile.image.url }}
+                            {% else %}
+                            {% static 'blog/images/images.jfif' %}
+                            {% endif %}" alt="Admin"
+                                     class="rounded-circle" width="150">
+                                <div class="mt-3">
+                                    <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                                    <p class="text-secondary mb-1"><i class='bx bxs-briefcase-alt-2'></i> {{ profile.job }}
+                                    </p>
+                                    <p class="text-muted font-size-sm"><i class='bx bxs-pin'></i> {{ profile.address }}
+                                    </p>
+                                    <p>{{ profile.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

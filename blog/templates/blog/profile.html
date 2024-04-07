@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block carousel %}
+{% endblock carousel %}
+
+{% block main %}
+
+<div class="container mt-5">
+    <div class="main-body">
+
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="
+                            {% if profile.image %}
+                            {{ profile.image.url }}
+                            {% else %}
+                            {% static 'blog/images/images.jfif' %}
+                            {% endif %}" alt="Admin"
+                                 class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                                <p class="text-secondary mb-1"><i class='bx bxs-briefcase-alt-2'></i> {{ profile.job }}
+                                </p>
+                                <p class="text-muted font-size-sm"><i class='bx bxs-pin'></i> {{ profile.address }}</p>
+                                <p>{{ profile.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ user.first_name }} {{ user.last_name }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ user.email }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ profile.phone }}
+                            </div>
+                        </div>
+                        <hr>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Location</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{ profile.address }}
+                            </div>
+                        </div>
+                        <hr>
+                        {% if request.user.pk == profile.user.pk %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="btn btn-info " target="__blank"
+                                   href="{% url 'edit_profile' user.pk %}">Edit</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="articles">
+        <div class="container mb-3">
+            <div class="cards">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for article in articles%}
+                    <div class="col">
+                        <div class="card" style="width: 415px;">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <b>{{ article.category }}</b>
+                                    </div>
+                                    <div>
+                                        {% if article.nudges != 1 %}
+                                        <b>{{ article.nudges }} nudges</b>
+                                        {% else %}
+                                        <b>{{ article.nudges }} nudge</b>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        {% if article.views != 1 %}
+                                        <b>{{ article.views }} views</b>
+                                        {% else %}
+                                        <b>{{ article.views }} view</b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <a href="{% url 'article_detail' article.id %}">
+                                <img src="{{ article.photo.url }}" class="card-img-top" alt="...">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.title }}</h5>
+                                <p class="card-text">{{ article.description|truncatechars:200 }}</p>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <b>{{ article.created_at }}</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock main %}
